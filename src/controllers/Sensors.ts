@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
+import Sensor from "@/models/Sensors";
+import mongoose from "mongoose";
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "get sensor" });
+      res.json({ sensor : await Sensor.find() });
       return;
     } catch (error) {
       next(error);
@@ -11,7 +13,7 @@ export default {
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "get sensor " + req.params.id});
+      res.json({ sensor : await Sensor.findById(req.params.id)});
       return;
     } catch (error) {
       next(error);
@@ -19,6 +21,7 @@ export default {
   },
   post: async (req: Request, res: Response, next: NextFunction) => {
     try {
+      Sensor.create(req.body);
       res.json({ message: "post sensor" });
       return;
     } catch (error) {
@@ -27,7 +30,8 @@ export default {
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "patch sensor " + req.params.id});
+      await Sensor.findByIdAndUpdate(req.params.id, req.body);
+      res.json({ message: "patch sensor"});
       return;
     } catch (error) {
       next(error);
@@ -35,7 +39,8 @@ export default {
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "delete sensor " + req.params.id});
+      await Sensor.findByIdAndDelete(req.params.id);
+      res.json({ message: "delete sensor"});
       return;
     } catch (error) {
       next(error);

@@ -3,10 +3,10 @@ import express from "express";
 const router = express.Router();
 
 /* Actuators */
-router.get("/actuator", Actuators.get);
-router.get("/actuator/:id", Actuators.getOne);
-router.post("/actuator", Actuators.post);
-router.patch("/actuator/:id", Actuators.patch);
-router.delete("/actuator/:id", Actuators.delete);
+router.get("/", Actuators.get);
+router.get("/:id", Actuators.getOne);
+router.post("/", Actuators.post);
+router.patch("/:id", Actuators.patch);
+router.delete("/:id", Actuators.delete);
 
 export default router;

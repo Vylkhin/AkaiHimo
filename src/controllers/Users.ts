@@ -1,9 +1,11 @@
 import { NextFunction, Request, Response } from "express";
+import User from "@/models/Users";
+import mongoose from "mongoose";
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "get users" });
+      res.json({ user : await User.find().select('-password')});
       return;
     } catch (error) {
       next(error);
@@ -11,7 +13,7 @@ export default {
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "get users "  + req.params.id });
+      res.json({ user : await User.findById(req.params.id).select('-password')});
       return;
     } catch (error) {
       next(error);
@@ -19,7 +21,8 @@ export default {
   },
   post: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "post users" });
+      User.create(req.body);
+      res.json({message: "post user"});
       return;
     } catch (error) {
       next(error);
@@ -27,7 +30,8 @@ export default {
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "patch users " + req.params.id});
+      await User.findByIdAndUpdate(req.params.id, req.body);
+      res.json({ message: "patch user"});
       return;
     } catch (error) {
       next(error);
@@ -35,7 +39,8 @@ export default {
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      res.json({ message: "delete users " + req.params.id});
+      await User.findByIdAndDelete(req.params.id);
+      res.json({ message: "delete user"});
       return;
     } catch (error) {
       next(error);

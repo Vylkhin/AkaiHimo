@@ -1,13 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import express from "express";
+
 import path from "path";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
 
 // Routers
 import indexRouter from "@/routes/Index";
-import actuatorRouter from "@/routes/Actuators"
-import sensorRouter from "@/routes/Sensors"
+import actuatorRouter from "@/routes/Actuators";
+import sensorRouter from "@/routes/Sensors";
+import userRouter from "@/routes/Users";
+import orm from "@/DB/orm";
+
 const app = express();
 
 // view engine setup
@@ -18,7 +22,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/", indexRouter, actuatorRouter, sensorRouter);
+app.use(orm);
+app.use("/", indexRouter);
+app.use("/actuator", actuatorRouter);
+app.use("/sensor", sensorRouter);
+app.use("/user", userRouter);
 
 // catch 404
 app.use(function (req: Request, res: Response, next: NextFunction) {
@@ -33,8 +41,7 @@ app.use(function (err: any, req: Request, res: Response, next: NextFunction) {
   res.locals.error = req.app.get("env") === "development" ? err : {};
 
   // render the error page
-  res.status(err.status || 500);
-  res.render("error");
+  res.status(err.status || 500).json(err);
 });
 
 export default app;

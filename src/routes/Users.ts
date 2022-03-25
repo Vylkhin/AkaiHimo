@@ -1,12 +1,12 @@
-import Actuators from "@/controllers/Actuators";
+import Users from "@/controllers/Users";
 import express from "express";
 const router = express.Router();
 
 /* Actuators */
-router.get("/actuator", Actuators.get);
-router.get("/actuator/:id", Actuators.getOne);
-router.post("/actuator", Actuators.post);
-router.patch("/actuator/:id", Actuators.patch);
-router.delete("/actuator/:id", Actuators.delete);
+router.get("/", Users.get);
+router.get("/:id", Users.getOne);
+router.post("/", Users.post);
+router.patch("/:id", Users.patch);
+router.delete("/:id", Users.delete);
 
 export default router;

@@ -1,49 +1,85 @@
 import { NextFunction, Request, Response } from "express";
 import Sensor from "@/models/Sensors";
-import mongoose from "mongoose";
+import OutputFormat from "@/OutputFormat";
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      res.json({ sensor : await Sensor.find() });
+      output.data = await Sensor.find()
+      res.json(output);
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      res.json({ sensor : await Sensor.findById(req.params.id)});
+      let data = await Sensor.findById(req.params.id);
+      if(data != null) {
+        output.data = data;
+        res.json(output);
+      }    
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error;
+      }
+      next(output);
     }
   },
   post: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      Sensor.create(req.body);
-      res.json({ message: "post sensor" });
+      output.data = await Sensor.create(req.body);
+      res.json(output);  
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      await Sensor.findByIdAndUpdate(req.params.id, req.body);
-      res.json({ message: "patch sensor"});
+      let data = await Sensor.findByIdAndUpdate(req.params.id, req.body);
+      if(data != null) {
+        output.data = data
+        res.json(output);
+      }  
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      await Sensor.findByIdAndDelete(req.params.id);
-      res.json({ message: "delete sensor"});
+      let data = await Sensor.findByIdAndDelete(req.params.id);
+      if(data != null) {
+        output.data = data
+        res.json(output);
+      }
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
 };

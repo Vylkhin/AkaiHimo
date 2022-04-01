@@ -1,6 +1,10 @@
 import mongoose from "mongoose"
-
-const SchemaUser = new mongoose.Schema({
+type User = {
+    email: string
+    password: string
+    username: string
+}
+const SchemaUser = new mongoose.Schema<User>({
     email: String,
     password: String,
     username: String
@@ -10,6 +14,7 @@ const SchemaUser = new mongoose.Schema({
 //type UserPost = Omit<User, "id">
 //type UserUpdate = Partial<UserPost>
 
+SchemaUser.set('toJSON', { virtuals: true });
 const User = mongoose.model('User', SchemaUser);
 
 export default User;

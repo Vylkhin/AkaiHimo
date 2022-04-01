@@ -9,16 +9,11 @@ type Actuator = {
     designation: string
     state: boolean
 }
-/*
 
+/*
 type ActuatorPost = Omit<Actuator, "id">
 type ActuatorUpdate = Partial<ActuatorPost>
 */
-
-// enum ActuatorType{
-//     "BLINDS",
-//     "LIGHT"
-// }
 
 const SchemaActuator = new mongoose.Schema({
     type : {
@@ -29,6 +24,7 @@ const SchemaActuator = new mongoose.Schema({
     state: Boolean
 });
 
+SchemaActuator.set('toJSON', { virtuals: true });
 const actuator = mongoose.model<Actuator>('Actuator', SchemaActuator);
 
 export default actuator;

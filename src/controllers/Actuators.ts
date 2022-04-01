@@ -8,50 +8,81 @@ export default {
     try {
       //res.json({ actuators : await Actuator.find() }); 
       output.data = await Actuator.find();
-      res.json({output});
+      res.json(output);
       return;
     } catch (error) {
       //output.err = new Error(error);
       output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
       next(output);
     }
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat();
     try {
-      res.json({ actuators : await Actuator.findById(req.params.id)});
-      //output.data = await Actuator.findById(req.params.id);
-      //res.json({output});
+      //res.json({ actuators : await Actuator.findById(req.params.id)});
+      let data = await Actuator.findById(req.params.id);
+      if(data != null) {
+        output.data = data;
+        res.json(output);
+      }    
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error;
+      }
+      next(output);
     }
   },
   post: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      await Actuator.create(req.body);
-      res.json({ message: "post actuator" });
+      output.data = await Actuator.create(req.body);
+      res.json(output);
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      await Actuator.findByIdAndUpdate(req.params.id, req.body);
-      res.json({ message: "patch actuator"});
+      let data = await Actuator.findByIdAndUpdate(req.params.id, req.body);
+      if(data != null) {
+        output.data = data
+        res.json(output);
+      }  
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
+    const output = new OutputFormat();
     try {
-      await Actuator.findByIdAndDelete(req.params.id);
-      res.json({ message: "delete actuator"});
+      let data = await Actuator.findByIdAndDelete(req.params.id);
+      if(data != null) {
+        output.data = data
+        res.json(output);
+      }
       return;
     } catch (error) {
-      next(error);
+      output.response = "NOK";
+      if(error instanceof Error) {
+        output.err = error
+      }
+      next(output);
     }
   },
 };

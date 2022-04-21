@@ -4,6 +4,7 @@ import OutputFormat from "@/OutputFormat";
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import xssProtect from "../securityMiddleware/xssProtect";
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +41,11 @@ export default {
   post: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat("OK", {});
     try {
+      // XSS Security
+      req.body.password = xssProtect(req.body.password)
+      req.body.email = xssProtect(req.body.email)
+      req.body.username = xssProtect(req.body.username)
+
       const hash = await argon2.hash(req.body.password)
       req.body.password = hash
       output.data!.id = (await User.create(userUpdate.parse(req.body)))._id
@@ -56,6 +62,11 @@ export default {
   login: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat();
     try {
+      // XSS Security
+      req.body.password = xssProtect(req.body.password)
+      req.body.email = xssProtect(req.body.email)
+      req.body.username = xssProtect(req.body.username)
+
       let user = await User.findOne({email:req.body.email});
       if(!user) {
         throw "user not found.";
@@ -78,7 +89,12 @@ export default {
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat("OK", {});
-    try {     
+    try {    
+      // XSS Security
+      req.body.password = xssProtect(req.body.password)
+      req.body.email = xssProtect(req.body.email)
+      req.body.username = xssProtect(req.body.username)
+       
       const hash = await argon2.hash(req.body.password);
       req.body.password = hash;
       console.log(output) 

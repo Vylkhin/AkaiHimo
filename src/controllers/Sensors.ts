@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import Sensor from "@/models/Sensors";
 import OutputFormat from "@/OutputFormat";
 import Tools from "@/Tools";
+import xssProtect from "../securityMiddleware/xssProtect";
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
@@ -40,6 +41,9 @@ export default {
   post: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat();
     try {
+      // XSS Security
+      req.body.designation = xssProtect(req.body.designation)
+
       output.data = await Sensor.create(req.body);
       res.json(output);  
       return;
@@ -54,6 +58,9 @@ export default {
   patch: async (req: Request, res: Response, next: NextFunction) => {
     const output = new OutputFormat();
     try {
+      // XSS Security
+      req.body.designation = xssProtect(req.body.designation)
+      
       let data = await Sensor.findByIdAndUpdate(req.params.id, req.body);
       if(data != null) {
         output.data = data;

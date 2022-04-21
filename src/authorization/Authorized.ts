@@ -9,7 +9,7 @@ export default async (req:Request, res: Response, next: NextFunction) => {
         const token = authHeader.split(' ')[1];
         const accessTokenSecret = process.env.SECRET_KEY;
         if(accessTokenSecret == null) {
-            throw new Error("bvbv");
+            throw new Error("wrong token");
             next();
         }
         jwt.verify(token, accessTokenSecret!, (err, user) => {

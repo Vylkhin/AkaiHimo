@@ -1,8 +1,10 @@
+import Authorized from "@/authorization/Authorized";
 import Sensors from "@/controllers/Sensors";
 import express from "express";
 const router = express.Router();
 
 /* Sensors */
+router.use(Authorized);
 router.get("/", Sensors.get);
 router.get("/:id", Sensors.getOne);
 router.post("/", Sensors.post);

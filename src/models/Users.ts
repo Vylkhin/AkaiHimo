@@ -1,4 +1,6 @@
 import mongoose from "mongoose"
+import z, { TypeOf } from "zod";
+
 type User = {
     email: string
     password: string
@@ -10,11 +12,13 @@ const SchemaUser = new mongoose.Schema<User>({
     username: String
 });
 
-//type UserGet = Omit<User, "password">
-//type UserPost = Omit<User, "id">
-//type UserUpdate = Partial<UserPost>
-
 SchemaUser.set('toJSON', { virtuals: true });
 const User = mongoose.model('User', SchemaUser);
 
 export default User;
+
+export const userUpdate = z.object({
+    email: z.string().email(),
+    password: z.string().min(4),
+    username: z.string().min(2).regex(/^[a-zA-Z0-9]+$/),
+  }); 

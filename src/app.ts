@@ -11,9 +11,10 @@ import actuatorRouter from "@/routes/Actuators";
 import sensorRouter from "@/routes/Sensors";
 import userRouter from "@/routes/Users";
 import orm from "@/DB/orm";
+import cors from "cors";
 
 const app = express();
-
+app.use(cors());
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
 app.use(logger("dev"));

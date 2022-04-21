@@ -12,6 +12,32 @@ This project is an API allowing to manage all the home automation of a house.
 - [Actuator](#Actuators)
 - [Sensors](#Sensors)
 
+## Seting up the environment 
+
+MongodB - pour toute la partie gestion de base de données
+``` 
+apt install mongodb
+
+systemctl start mongodb
+```
+
+Library that you'll need
+```
+  npm install node
+  npm install typescript
+  npm install dotenv --save
+  npm install express
+  npm install argon2
+  npm install jsonwebtoken
+  npm install xss
+  npm install zod
+```
+
+Then you can run with
+```
+npm start
+```
+
 <p id = "Users"> </p>
 
 ## **Users features**

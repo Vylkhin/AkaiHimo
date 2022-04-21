@@ -10,10 +10,6 @@ type Actuator = {
     state: boolean
 }
 
-/*
-type ActuatorPost = Omit<Actuator, "id">
-type ActuatorUpdate = Partial<ActuatorPost>
-*/
 
 const SchemaActuator = new mongoose.Schema({
     type : {

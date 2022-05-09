@@ -25,5 +25,4 @@ const SchemaSensor = new mongoose.Schema({
 SchemaSensor.set('toJSON', { virtuals: true });
 const sensor = mongoose.model<Sensor>('Sensor', SchemaSensor);
 
-
 export default sensor;

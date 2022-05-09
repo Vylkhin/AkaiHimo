@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import express from "express";
 
+import Mail from "./services/Mailer";
 import path from "path";
 import logger from "morgan";
 import cookieParser from "cookie-parser";
@@ -24,6 +25,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use(orm);
+
+const mail = new Mail()
+mail.send("vylkhin@live.fr", "puceau moi ? serieusement ^^ haha on me l avait pas sortie celle la depuis loooongtemps :)")
+console.log("olo")
+
 app.use("/", indexRouter);
 app.use("/actuator", actuatorRouter);
 app.use("/sensor", sensorRouter);

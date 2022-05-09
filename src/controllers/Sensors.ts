@@ -3,11 +3,15 @@ import Sensor from "@/models/Sensors";
 import OutputFormat from "@/OutputFormat";
 import Tools from "@/Tools";
 import xssProtect from "../securityMiddleware/xssProtect";
+import Database from "../services/Database";
+
+const db = new Database();
+const output = new OutputFormat();
 
 export default {
   get: async (req: Request, res: Response, next: NextFunction) => {
-    const output = new OutputFormat();
     try {
+      //const data = await db.getAll("Sensor");
       const data = await Sensor.find() 
       const newValue = data.map(dataTemp => ({id:dataTemp.id, type:dataTemp.type, designation:dataTemp.designation, rawValue:dataTemp.rawValue, value: Tools.showSensors(dataTemp.type, dataTemp.rawValue)}));
       output.data = newValue;
@@ -22,9 +26,8 @@ export default {
     }
   },
   getOne: async (req: Request, res: Response, next: NextFunction) => {
-    const output = new OutputFormat();
     try {
-      let data = await Sensor.findById(req.params.id);
+      let data = await db.getById("Sensor", req.params.id);
       if(data != null) {
         output.data = data;
         res.json(output);
@@ -39,12 +42,11 @@ export default {
     }
   },
   post: async (req: Request, res: Response, next: NextFunction) => {
-    const output = new OutputFormat();
     try {
       // XSS Security
       req.body.designation = xssProtect(req.body.designation)
 
-      output.data = await Sensor.create(req.body);
+      output.data = await db.create("Sensor", req.body);
       res.json(output);  
       return;
     } catch (error) {
@@ -56,11 +58,10 @@ export default {
     }
   },
   patch: async (req: Request, res: Response, next: NextFunction) => {
-    const output = new OutputFormat();
     try {
       // XSS Security
       req.body.designation = xssProtect(req.body.designation)
-      
+      //let data = await db.update("Sensor", req.params.id, req.body);
       let data = await Sensor.findByIdAndUpdate(req.params.id, req.body);
       if(data != null) {
         output.data = data;
@@ -76,9 +77,8 @@ export default {
     }
   },
   delete: async (req: Request, res: Response, next: NextFunction) => {
-    const output = new OutputFormat();
     try {
-      let data = await Sensor.findByIdAndDelete(req.params.id);
+      let data = await db.delete("Sensor", req.params.id);
       if(data != null) {
         output.data = data
         res.json(output);
